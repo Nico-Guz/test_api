@@ -1,7 +1,7 @@
 package main
 
 import (
-	_ "test_api/routers"
+	_ "github.com/Nico-Guz/test_api/routers" // Se modifica la ruta del paquete routers
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/orm"
@@ -16,4 +16,3 @@ func main() {
 	}
 	beego.Run()
 }
-
