@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/Nico-Guz/test_api/models"
+	// "github.com/udistrital/utils_oas/time_bogota"
 
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/logs" // Se importa el paquete logs
@@ -35,6 +36,9 @@ func (c *RolController) URLMapping() {
 // @router / [post]
 func (c *RolController) Post() {
 	var v models.Rol
+	// v.FechaCreacion = time_bogota.TiempoBogotaFormato()
+	// v.FechaModificacion = time_bogota.TiempoBogotaFormato()
+
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddRol(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
@@ -153,6 +157,8 @@ func (c *RolController) Put() {
 	id, _ := strconv.Atoi(idStr)
 	v := models.Rol{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
+		// v.FechaCreacion = time_bogota.TiempoCorreccionFormato(v.FechaCreacion)
+		// v.FechaModificacion = time_bogota.TiempoBogotaFormato()
 		if err := models.UpdateRolById(&v); err == nil {
 			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
