@@ -10,7 +10,7 @@ import (
 )
 
 type Rol struct {
-	Id         int      `orm:"column(id);pk"`
+	Id         int      `orm:"column(id);pk;auto"` // Se agrega "auto" para clave primaria autoincremental
 	Aplicacion string   `orm:"column(aplicacion)"`
 	UsuarioId  *Usuario `orm:"column(usuario_id);rel(fk)"`
 }
@@ -47,7 +47,7 @@ func GetRolById(id int) (v *Rol, err error) {
 func GetAllRol(query map[string]string, fields []string, sortby []string, order []string,
 	offset int64, limit int64) (ml []interface{}, err error) {
 	o := orm.NewOrm()
-	qs := o.QueryTable(new(Rol))
+	qs := o.QueryTable(new(Rol)).RelatedSel() // Se agrega RelatedSel para relaciones
 	// query k=v
 	for k, v := range query {
 		// rewrite dot-notation to Object__Attribute
