@@ -3,11 +3,13 @@ package controllers
 import (
 	"encoding/json"
 	"errors"
-	"github.com/Nico-Guz/test_api/models"
 	"strconv"
 	"strings"
 
+	"github.com/Nico-Guz/test_api/models"
+
 	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/logs" // Se importa el paquete logs
 )
 
 // UsuarioController operations for Usuario
@@ -36,12 +38,19 @@ func (c *UsuarioController) Post() {
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if _, err := models.AddUsuario(&v); err == nil {
 			c.Ctx.Output.SetStatus(201)
-			c.Data["json"] = v
+			// Respuesta estructurada con mensaje de éxito
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 		} else {
-			c.Data["json"] = err.Error()
+			// Registro fallido, se registra el error y se envía una respuesta de error
+			logs.Error(err)
+			c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+			c.Abort("400")
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		// Registro fallido, se registra el error y se envía una respuesta de error
+		logs.Error(err)
+		c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+		c.Abort("400")
 	}
 	c.ServeJSON()
 }
@@ -58,9 +67,13 @@ func (c *UsuarioController) GetOne() {
 	id, _ := strconv.Atoi(idStr)
 	v, err := models.GetUsuarioById(id)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		// Registro fallido, se registra el error y se envía una respuesta de error
+		logs.Error(err)
+		c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+		c.Abort("400")
 	} else {
-		c.Data["json"] = v
+		// Respuesta estructurada con mensaje de éxito
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": v}
 	}
 	c.ServeJSON()
 }
@@ -121,9 +134,13 @@ func (c *UsuarioController) GetAll() {
 
 	l, err := models.GetAllUsuario(query, fields, sortby, order, offset, limit)
 	if err != nil {
-		c.Data["json"] = err.Error()
+		// Registro fallido, se registra el error y se envía una respuesta de error
+		logs.Error(err)
+		c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+		c.Abort("400")
 	} else {
-		c.Data["json"] = l
+		// Respuesta estructurada con mensaje de éxito
+		c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": l}
 	}
 	c.ServeJSON()
 }
@@ -142,12 +159,19 @@ func (c *UsuarioController) Put() {
 	v := models.Usuario{Id: id}
 	if err := json.Unmarshal(c.Ctx.Input.RequestBody, &v); err == nil {
 		if err := models.UpdateUsuarioById(&v); err == nil {
-			c.Data["json"] = "OK"
+			d := map[string]interface{}{"Id": id}
+			c.Data["json"] = map[string]interface{}{"Success": true, "Status": "201", "Message": "Registration successful", "Data": d}
 		} else {
-			c.Data["json"] = err.Error()
+			// Registro fallido, se registra el error y se envía una respuesta de error
+			logs.Error(err)
+			c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+			c.Abort("400")
 		}
 	} else {
-		c.Data["json"] = err.Error()
+		// Registro fallido, se registra el error y se envía una respuesta de error
+		logs.Error(err)
+		c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+		c.Abort("400")
 	}
 	c.ServeJSON()
 }
@@ -165,7 +189,10 @@ func (c *UsuarioController) Delete() {
 	if err := models.DeleteUsuario(id); err == nil {
 		c.Data["json"] = "OK"
 	} else {
-		c.Data["json"] = err.Error()
+		// Registro fallido, se registra el error y se envía una respuesta de error
+		logs.Error(err)
+		c.Data["message"] = "Error service POST: The request constains an incorrect data type or an invalid parameter"
+		c.Abort("400")
 	}
 	c.ServeJSON()
 }
