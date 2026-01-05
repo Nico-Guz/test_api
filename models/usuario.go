@@ -13,6 +13,8 @@ type Usuario struct {
 	Id       int    `orm:"column(id);pk;auto"` // Se agrega "auto" para clave primaria autoincremental
 	Nombre   string `orm:"column(nombre)"`
 	Apellido string `orm:"column(apellido);null"`
+	// FechaCreacion    string `orm:"column(fecha_creacion);type(timestamp without time zone)"`
+	// FechaModificacion string `orm:"column(fecha_modificacion);type(timestamp without time zone)"`
 }
 
 func (t *Usuario) TableName() string {

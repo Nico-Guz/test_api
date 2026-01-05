@@ -13,6 +13,8 @@ type Rol struct {
 	Id         int      `orm:"column(id);pk;auto"` // Se agrega "auto" para clave primaria autoincremental
 	Aplicacion string   `orm:"column(aplicacion)"`
 	UsuarioId  *Usuario `orm:"column(usuario_id);rel(fk)"`
+	// FechaCreacion    string `orm:"column(fecha_creacion);type(timestamp without time zone)"`
+	// FechaModificacion string `orm:"column(fecha_modificacion);type(timestamp without time zone)"`
 }
 
 func (t *Rol) TableName() string {
